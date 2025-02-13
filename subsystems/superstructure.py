@@ -57,10 +57,6 @@ class Superstructure(Subsystem):
         if DriverStation.isTest():
             return
 
-        if DriverStation.isDisabled():
-            default_command = self.set_goal_command(self.Goal.DEFAULT)
-            self.setDefaultCommand(default_command)
-
         self._last_goal = self._goal
 
         SmartDashboard.putString("Superstructure Goal", self._goal.name)
@@ -77,6 +73,10 @@ class Superstructure(Subsystem):
             self.elevator.unfreeze()
         if self.elevator.is_at_setpoint() and self.pivot.get_current_state() is PivotSubsystem.SubsystemState.AVOID_ELEVATOR:
             self.pivot.unfreeze()
+
+        if DriverStation.isDisabled():
+            default_command = self.set_goal_command(self.Goal.DEFAULT)
+            self.setDefaultCommand(default_command)
 
         match self._goal:
             
