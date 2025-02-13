@@ -1,9 +1,11 @@
 from enum import Enum
 
+import wpilib
 from phoenix6.configs import TalonFXConfiguration
 from phoenix6.configs.config_groups import NeutralModeValue, MotorOutputConfigs, FeedbackConfigs
 from phoenix6.controls import DutyCycleOut
 from phoenix6.hardware import TalonFX
+from phoenix6.signals import InvertedValue
 
 from wpilib import Servo
 
@@ -24,7 +26,7 @@ class ClimberSubsystem(StateSubsystem):
 
     _motor_config = (TalonFXConfiguration()
                      .with_slot0(Constants.ClimberConstants.GAINS)
-                     .with_motor_output(MotorOutputConfigs().with_neutral_mode(NeutralModeValue.BRAKE))
+                     .with_motor_output(MotorOutputConfigs().with_neutral_mode(NeutralModeValue.BRAKE).with_inverted(InvertedValue.CLOCKWISE_POSITIVE))
                      .with_feedback(FeedbackConfigs().with_sensor_to_mechanism_ratio(Constants.ClimberConstants.GEAR_RATIO))
                      )
 
@@ -37,19 +39,24 @@ class ClimberSubsystem(StateSubsystem):
         
         self._climb_request = DutyCycleOut(0)
 
+        self.climbServo.setAngle(180)
+
     def periodic(self):
         super().periodic()
 
-    def _handle_desired_state(self) -> None:
+    def set_desired_state(self, desired_state: SubsystemState) -> None:
+
+        self._subsystem_state = desired_state
+
         match self._subsystem_state:
             case self.SubsystemState.STOP:
                 self._climb_request.output = 0
                 self.climbServo.setAngle(180)
-            case self.SubsystemState.CLIMB_POSITIVE:
-                self._climb_request.output = 0.5
+            case self.SubsystemState.CLIMB_POSITIVE: #
+                self._climb_request.output = 0.3
                 self.climbServo.setAngle(0)
             case self.SubsystemState.CLIMB_NEGATIVE:
-                self._climb_request.output = -0.5
-                self.climbServo.setAngle(0)
+                self._climb_request.output = -0.3
+                self.climbServo.setAngle(180)
 
         self._climb_motor.set_control(self._climb_request)
