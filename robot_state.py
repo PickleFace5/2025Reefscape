@@ -83,8 +83,8 @@ class RobotState:
         NetworkTableInstance.getDefault().flush()
 
     def update_mechanisms(self) -> None:
-        self._elevator_mech.setLength(self._elevator.get_height())
-        self._pivot_mech.setAngle(self._pivot.get_angle())
+        self._elevator_mech.setLength(-self._elevator.get_height())
+        self._pivot_mech.setAngle(-self._pivot.get_angle())
 
     def get_current_pose(self) -> Pose2d:
         """Returns the current pose of the robot on the field (blue-side origin)."""

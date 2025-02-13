@@ -7,6 +7,7 @@ from phoenix6.configs import TalonFXConfiguration, CANcoderConfiguration, Motion
 from phoenix6.controls import VoltageOut, Follower, DutyCycleOut, MotionMagicDutyCycle
 from phoenix6.hardware import CANcoder, TalonFX
 from phoenix6.signals import InvertedValue, FeedbackSensorSourceValue, NeutralModeValue
+from phoenix6.sim import ChassisReference
 from wpilib import DriverStation, RobotController
 from wpilib.sysid import SysIdRoutineLog
 from wpimath.filter import Debouncer
@@ -64,6 +65,7 @@ class PivotSubsystem(StateSubsystem):
         super().__init__("Pivot")
         self._encoder = CANcoder(Constants.CanIDs.PIVOT_CANCODER)
         self._master_motor = TalonFX(Constants.CanIDs.LEFT_PIVOT_TALON)
+        self._master_motor.sim_state.orientation = ChassisReference.Clockwise_Positive
         self._follower_motor = TalonFX(Constants.CanIDs.RIGHT_PIVOT_TALON)
 
         self._encoder.configurator.apply(self._encoder_config)

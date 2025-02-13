@@ -6,10 +6,11 @@ from commands2 import cmd
 from commands2.button import Trigger
 from commands2.sysid import SysIdRoutine
 from phoenix6 import SignalLogger, BaseStatusSignal
-from phoenix6.configs import TalonFXConfiguration, MotorOutputConfigs, FeedbackConfigs, CANdiConfiguration
+from phoenix6.configs import TalonFXConfiguration, MotorOutputConfigs, FeedbackConfigs, CANdiConfiguration, DigitalInputsConfigs
 from phoenix6.configs.config_groups import NeutralModeValue, MotionMagicConfigs
 from phoenix6.controls import Follower, VoltageOut, PositionDutyCycle, DutyCycleOut, MotionMagicDutyCycle
 from phoenix6.hardware import CANdi, TalonFX
+from phoenix6.sim import ChassisReference
 from wpilib import DriverStation
 from wpilib.sysid import SysIdRoutineLog
 from wpimath.filter import Debouncer
@@ -50,6 +51,7 @@ class ElevatorSubsystem(StateSubsystem):
 
         self._master_motor = TalonFX(Constants.CanIDs.LEFT_ELEVATOR_TALON)
         self._master_motor.configurator.apply(self._motor_config)
+        self._master_motor.sim_state.orientation = ChassisReference.Clockwise_Positive
 
         self._follower_motor = TalonFX(Constants.CanIDs.RIGHT_ELEVATOR_TALON)
         self._follower_motor.configurator.apply(self._motor_config)
