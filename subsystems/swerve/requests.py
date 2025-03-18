@@ -1,6 +1,6 @@
 from typing import Self, Callable
 
-from pathplannerlib.util.swerve import SwerveSetpointGenerator, SwerveSetpoint
+from pathplannerlib.util.swerve import SwerveSetpoint, SwerveSetpointGenerator
 from phoenix6 import StatusCode
 from phoenix6.swerve import SwerveModule, SwerveControlParameters
 from phoenix6.swerve.requests import SwerveRequest, ApplyRobotSpeeds

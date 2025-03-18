@@ -304,8 +304,9 @@ class SwerveSubsystem(Subsystem, swerve.SwerveDrivetrain):
                 .with_speeds(speeds)
             ),
             PPHolonomicDriveController(
-                PIDConstants(7.0, 0.1, 0.2),
-                PIDConstants(7.0, 0.1, 0.2)
+                PIDConstants(5.5, 0.0, 0.0),
+                PIDConstants(5.0, 0.0, 0.0),
+                0.004
             ),
             config,
             lambda: DriverStation.getAlliance() == DriverStation.Alliance.kRed,
